@@ -2,17 +2,99 @@
 
 #include <stdlib.h>
 
-struct list_node *new_node(size_t value) { return NULL; }
+struct list_node *new_node(size_t value) {
+  struct list_node* node = (struct list_node*)malloc(sizeof(struct list_node));
 
-void insert_at_head(struct linked_list *list, size_t value) {}
+  if (node == NULL){
+    return NULL;
+  }
 
-void insert_at_tail(struct linked_list *list, size_t value) {}
+  node -> value = value;
+  node -> next = NULL;
 
-size_t remove_from_head(struct linked_list *list) { return 0; }
+  return node; 
+}
 
-size_t remove_from_tail(struct linked_list *list) { return 0; }
+void insert_at_head(struct linked_list *list, size_t value) {
+  struct list_node* new_node = (struct list_node*)malloc(sizeof(struct list_node));
+  
+  if (new_node == NULL){
+    return;
+  }
 
-void free_list(struct linked_list list) {}
+  new_node -> value = value;
+  new_node -> next = list -> head;
+  list -> head = new_node;
+}
+
+void insert_at_tail(struct linked_list *list, size_t value) {
+  struct list_node* new_node = (struct list_node*)malloc(sizeof(struct list_node));
+  if (new_node == NULL){
+    return;
+  }
+
+  new_node -> value = value;
+  new_node -> next = NULL;
+
+  if (list -> head == NULL){
+    list -> head = new_node;
+    return;
+  }
+
+  struct list_node* current = list -> head;
+  while (current -> next != NULL){
+    current = current -> next;
+  }
+
+  current -> next = new_node;
+}
+
+size_t remove_from_head(struct linked_list *list) { 
+  if (list -> head == NULL){  
+    return 0;
+  }
+  
+  struct list_node* temp = list -> head;
+  size_t value = temp -> value;
+  list -> head = temp -> next;
+  free(temp);
+  return value;
+}
+
+size_t remove_from_tail(struct linked_list *list) { 
+  if (list -> head == NULL){
+    return 0; 
+  }
+
+  if (list -> head -> next == NULL){
+    size_t value = list -> head -> value;
+    free(list -> head);
+    list -> head = NULL;
+    return value;
+  }
+
+  struct list_node* current = list -> head;
+  while (current -> next -> next != NULL){
+    current = current -> next;
+  }
+
+  size_t value = current -> next -> value;
+  free(current -> next);
+  current -> next = NULL;
+  return value;
+}
+
+void free_list(struct linked_list list) {
+  struct list_node *temp;
+  struct list_node *current = list.head;
+
+  while (current != NULL){
+    temp = current;
+    current = current -> next;
+    free (temp);
+  }
+  list.head = NULL;
+}
 
 // Utility function to help you debugging, do not modify
 void dump_list(FILE *fp, struct linked_list list) {
