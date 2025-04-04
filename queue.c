@@ -17,7 +17,7 @@ struct game_state dequeue(struct queue *q) {
 }
 
 int number_of_moves(struct game_state start) {
-    struct queue *q;
+    struct queue* q = (struct queue*)malloc(sizeof(struct queue));
     struct list_node* new_node = (struct list_node*)malloc(sizeof(struct list_node));
     new_node -> next = NULL;
 
