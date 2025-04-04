@@ -24,20 +24,17 @@ int number_of_moves(struct game_state start) {
     if (q -> data.head == NULL){
         q -> data.head = new_node;
     }
-/*
-    new_node bfs(graph g, node start, node search) {
-        queue q = new_queue();
-        while (!empty(s)) {
-            node cur = dequeue(&q);
-            if (equals(cur, search)) {
-                return cur;
-            } else {
-                for (node child in children(cur)) {
-                    enqueue(&q, child);
-                }
+
+    while (q -> data.head != NULL) {
+        struct game_state curr = dequeue(q);
+        if (start == curr) {
+            return curr;
+        } else {
+            for (node child in children(curr)) {
+                enqueue(&q, child);
             }
         }
     }
-*/
+
     return 0; 
 }
