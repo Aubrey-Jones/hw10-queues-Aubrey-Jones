@@ -2,7 +2,41 @@
 #include "tile_game.h"
 #include "linked_list.h"
 #include <stdbool.h>
+#include <stdlib.h>
 #include <stdio.h>
+
+struct visited_states {
+    uint64_t *states;
+    size_t count;
+    size_t capacity;
+};
+
+void initialize_visited(struct visited_states *visited, size_t initial_capacity){
+    visited -> states = malloc(initial_capacity * sizeof(uint64_t));
+    visited -> count = 0;
+    visited -> capacity = initial_capacity;
+}
+
+void free_visited(struct visited_states *visited){
+    free(visited -> states);
+}
+
+bool is_state_visited(struct visited_states *visited, uint64_t state){
+    for (size_t i = 0; i < visited -> count; i++){
+        if (visited -> states[i] == state){
+            return true;
+        }
+    }
+    return false;
+}
+
+void mark_state_as_visited(struct visited_states *visited, uint64_t state){
+    if (visited -> count >= visited -> capacity){
+        visited -> capacity *= 2;
+        visited -> states = realloc(visited -> states, visited -> capacity * sizeof(uint64_t));
+    }
+    visited -> states[visited -> count++] = state;
+}
 
 bool is_goal(struct game_state state){
     int goal[4][4] = {
@@ -14,7 +48,6 @@ bool is_goal(struct game_state state){
 
     for (int row = 0; row < 4; row++){
         for (int col = 0; col < 4; col++){
-            printf("test4\n");
             if (state.tiles[row][col] != goal[row][col]){
                 return false;
             }
@@ -66,17 +99,22 @@ struct game_state dequeue(struct queue *q) {
 }
 
 int number_of_moves(struct game_state start) {
+    struct visited_states visited = {0};
+    initialize_visited(&visited, 100);
+
     struct queue q = {0};
     create_queue(&q);
     enqueue(&q, start);
+    mark_state_as_visited(&visited,serialize(start));
 
     while (!is_empty(&q)){
         struct game_state current = dequeue(&q);
 
         if (is_goal(current)){
+            free_visited(&visited);
             return current.num_steps;
         }
-        printf("test2\n");
+
         struct game_state next_states[4];
         next_states[0] = current; move_up(&next_states[0]);
         next_states[1] = current; move_down(&next_states[1]);
@@ -84,11 +122,13 @@ int number_of_moves(struct game_state start) {
         next_states[3] = current; move_right(&next_states[3]);
 
         for (int i=0; i < 4; i++){
-            if (!is_valid(next_states[i])){
+            uint64_t ser_state = serialize(next_states[i]);
+            if (is_valid(next_states[i]) && (!is_state_visited(&visited,ser_state))){
+                mark_state_as_visited(&visited, ser_state);
                 enqueue(&q, next_states[i]);
             }
         }
     }
-
+    free_visited(&visited);
     return -1;
 }
