@@ -18,7 +18,7 @@ struct list_node *new_node(size_t value) {
 void insert_at_head(struct linked_list *list, size_t value) {
   struct list_node *val = new_node(value);
   
-  if (new_node == NULL){
+  if (val == NULL){
     return;
   }
 
@@ -28,7 +28,7 @@ void insert_at_head(struct linked_list *list, size_t value) {
 
 void insert_at_tail(struct linked_list *list, size_t value) {
   struct list_node *val = new_node(value);
-  if (new_node == NULL){
+  if (val == NULL){
     return;
   }
 
