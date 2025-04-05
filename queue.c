@@ -1,8 +1,22 @@
 #include "queue.h"
 #include "tile_game.h"
-#include <stdlib.h>
+#include "linked_list.h"
+#include <stdbool.h>
 #include <stdio.h>
-#include <stdint.h>
+
+#define GRID_SIZE 4
+
+typedef struct {
+    int correctRow;
+    int correctCol;
+} goalSingle;
+
+typedef struct{
+    int currentRow;
+    int currentCol;
+    goalSingle target;
+} currentGame;
+
 
 void enqueue(struct queue *q, struct game_state state) {
     int spot = serialize(state);
@@ -17,24 +31,10 @@ struct game_state dequeue(struct queue *q) {
 }
 
 int number_of_moves(struct game_state start) {
-    struct queue* q = (struct queue*)malloc(sizeof(struct queue));
-    struct list_node* new_node = (struct list_node*)malloc(sizeof(struct list_node));
-    new_node -> next = NULL;
+    uint64_t buff = serialize(start);
+    struct game_state state = deserialize(buff);
 
-    if (q -> data.head == NULL){
-        q -> data.head = new_node;
-    }
-
-    while (q -> data.head != NULL) {
-        struct game_state curr = dequeue(q);
-        if (start == curr) {
-            return curr;
-        } else {
-            for (node child in children(curr)) {
-                enqueue(&q, child);
-            }
-        }
-    }
+    
 
     return 0; 
 }
