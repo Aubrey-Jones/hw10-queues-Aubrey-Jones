@@ -87,7 +87,7 @@ int number_of_moves(struct game_state start) {
         move_right(&next_states[3]);
 
         for (int i=0; i < 4; i++){
-            if (is_valid(next_states[i])){
+            if (!is_valid(next_states[i])){
                 enqueue(&q, next_states[i]);
             }
         }
