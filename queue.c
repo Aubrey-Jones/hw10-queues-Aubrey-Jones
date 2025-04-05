@@ -11,9 +11,10 @@ bool is_goal(struct game_state state){
         {9,10,11,12},
         {13,14,15,0}
     };
-    
+
     for (int row = 0; row < 4; row++){
         for (int col = 0; col < 4; col++){
+            printf("test4\n");
             if (state.tiles[row][col] != goal[row][col]){
                 return false;
             }
@@ -48,7 +49,7 @@ void create_queue(struct queue *q){
 }
 
 bool is_empty(struct queue *q){
-    return (q -> data.head == NULL);
+    return ((q -> data.head) == NULL);
 }
 
 void enqueue(struct queue *q, struct game_state state) {
@@ -75,16 +76,12 @@ int number_of_moves(struct game_state start) {
         if (is_goal(current)){
             return current.num_steps;
         }
-
+        printf("test2\n");
         struct game_state next_states[4];
-        next_states[0] = current; 
-        move_up(&next_states[0]);
-        next_states[1] = current; 
-        move_down(&next_states[1]);
-        next_states[2] = current; 
-        move_left(&next_states[2]);
-        next_states[3] = current; 
-        move_right(&next_states[3]);
+        next_states[0] = current; move_up(&next_states[0]);
+        next_states[1] = current; move_down(&next_states[1]);
+        next_states[2] = current; move_left(&next_states[2]);
+        next_states[3] = current; move_right(&next_states[3]);
 
         for (int i=0; i < 4; i++){
             if (!is_valid(next_states[i])){
@@ -93,5 +90,5 @@ int number_of_moves(struct game_state start) {
         }
     }
 
-    return num_steps;
+    return -1;
 }
