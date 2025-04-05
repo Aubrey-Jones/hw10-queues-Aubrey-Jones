@@ -17,6 +17,14 @@ typedef struct{
     goalSingle target;
 } currentGame;
 
+struct goalSingle {
+    
+};
+
+bool isCorrectValue(currentGame *tile){
+    return (tile -> currentRow == tile -> target.correctRow) && (tile -> currentCol == tile -> target.correctCol);
+}
+
 
 void enqueue(struct queue *q, struct game_state state) {
     int spot = serialize(state);
@@ -34,7 +42,7 @@ int number_of_moves(struct game_state start) {
     uint64_t buff = serialize(start);
     struct game_state state = deserialize(buff);
 
-    
+
 
     return 0; 
 }
