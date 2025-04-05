@@ -93,5 +93,5 @@ int number_of_moves(struct game_state start) {
         }
     }
 
-    return -1; 
+    return num_steps;
 }
