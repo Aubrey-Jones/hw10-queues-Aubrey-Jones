@@ -48,7 +48,7 @@ void create_queue(struct queue *q){
 }
 
 bool is_empty(struct queue *q){
-    return (&q -> data.head == NULL);
+    return (q -> data.head == NULL);
 }
 
 void enqueue(struct queue *q, struct game_state state) {
